@@ -1,0 +1,17 @@
+diff --git a/test/fizzbuzz/fizzbuzz.go b/test/fizzbuzz/fizzbuzz.go
+index d7eb79c..3f7fd60 100644
+--- a/test/fizzbuzz/fizzbuzz.go
++++ b/test/fizzbuzz/fizzbuzz.go
+@@ -14,10 +14,10 @@ const (
+ func FizzBuzz(i int) string {
+ 	if i%3 == 0 && i%5 == 0 {
+ 		return fizz + buzz
+-	} else if i%3 == 0 {
+-		return fizz
+ 	} else if i%5 == 0 {
+ 		return buzz
++	} else if i%3 == 0 {
++		return fizz
+ 	}
+ 	return strconv.Itoa(i)
+ }

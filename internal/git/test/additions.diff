@@ -1,0 +1,17 @@
+diff --git a/test/fizzbuzz/fizzbuzz.go b/test/fizzbuzz/fizzbuzz.go
+index d7eb79c..6832c11 100644
+--- a/test/fizzbuzz/fizzbuzz.go
++++ b/test/fizzbuzz/fizzbuzz.go
+@@ -12,5 +12,12 @@ const (
+ // FizzBuzz returns "fizz" if i is divisible by 3, "buzz" if i is divisible by
+ // 5, "fizzbuzz" if i is divisible by both 3 and 5, and i as a string otherwise
+ func FizzBuzz(i int) string {
++	if i%3 == 0 && i%5 == 0 {
++		return fizz + buzz
++	} else if i%3 == 0 {
++		return fizz
++	} else if i%5 == 0 {
++		return buzz
++	}
+ 	return strconv.Itoa(i)
+ }
