@@ -1,0 +1,40 @@
+diff --git a/test/adder/adder.go b/test/adder/adder.go
+new file mode 100644
+index 0000000..dc42d30
+--- /dev/null
++++ b/test/adder/adder.go
+@@ -0,0 +1,15 @@
++package adder
++
++// AddNums adds numbers
++func AddNums(nums ...int) int {
++	total := 0
++	for _, n := range nums {
++		total +=n
++	}
++
++	if total == 42 {
++		panic("invalid number")
++	}
++
++	return total
++}
+diff --git a/test/adder/adder_test.go b/test/adder/adder_test.go
+new file mode 100644
+index 0000000..0193b06
+--- /dev/null
++++ b/test/adder/adder_test.go
+@@ -0,0 +1,13 @@
++package adder_test
++
++import (
++	"testing"
++
++	"github.com/jpb/barrelman/test/adder"
++	"github.com/stretchr/testify/require"
++)
++
++func TestAdder(t *testing.T) {
++	require := require.New(t)
++	require.Equal(6, adder.AddNums(1, 2, 3))
++}
