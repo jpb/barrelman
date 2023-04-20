@@ -13,7 +13,7 @@ func FindGoPackage(rootPath string, dir string) (GoPackage, error) {
 	ctx := build.Default
 	p, err := ctx.Import(dir, rootPath, 0)
 	if err != nil {
-		panic(err)
+		return GoPackage{}, err
 	}
 	testFiles := append(p.TestGoFiles, p.XTestGoFiles...)
 	return GoPackage{

@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"fmt"
 	"io"
 	"path"
 	"path/filepath"
@@ -11,6 +12,8 @@ import (
 	"github.com/jpb/barrelman/internal/source"
 )
 
+// Warning represents a issue that barrel man has discovered. For human
+// consumption.
 type Warning struct {
 	Filepath  string
 	StartLine int
@@ -72,13 +75,18 @@ func Run(
 	}
 
 	// Find files with no test coverage at all
-	for _, hunks := range additionsByFile {
+	for file, hunks := range additionsByFile {
+		if _, ok := uncoveredByFile[file]; ok {
+			// skip as it would be handled above
+			continue
+		}
 		hunk := hunks[0]
 		relative, _ := filepath.Rel(rootPath, hunk.Filepath)
 		dir := "./" + path.Dir(relative)
 		p, err := source.FindGoPackage(rootPath, dir)
 		if err != nil {
-			return err
+			fmt.Println(err)
+			continue
 		}
 		if !p.HasTests {
 			report(Warning{
