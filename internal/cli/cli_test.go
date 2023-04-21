@@ -110,7 +110,7 @@ func TestRun(t *testing.T) {
 			Filepath:  "test/adder/adder.go",
 			StartLine: 10,
 			EndLine:   11,
-			Message:   "no test coverage",
+			Message:   "Lines 10-11 have no test coverage.",
 		},
 	}, actual)
 }

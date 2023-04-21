@@ -65,11 +65,15 @@ func Run(
 		// Find intersections between additions
 		for _, hunk := range hunk.Intersections(additions, uncovered) {
 			path, _ := filepath.Rel(rootPath, file)
+			msg := fmt.Sprintf("Line %d has no test coverage.", hunk.StartLine)
+			if hunk.StartLine != hunk.EndLine {
+				msg = fmt.Sprintf("Lines %d-%d have no test coverage.", hunk.StartLine, hunk.EndLine)
+			}
 			report(Warning{
 				Filepath:  path,
 				StartLine: hunk.StartLine,
 				EndLine:   hunk.EndLine,
-				Message:   "no test coverage",
+				Message:   msg,
 			})
 		}
 	}
@@ -92,7 +96,7 @@ func Run(
 			report(Warning{
 				Filepath:  hunk.Filepath,
 				StartLine: hunk.StartLine,
-				Message:   "no test files found for this package",
+				Message:   "There were no test files found for this package.",
 			})
 		}
 	}
