@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/bluekeyes/go-gitdiff v0.7.1
 	github.com/stretchr/testify v1.8.2
+	golang.org/x/mod v0.10.0
 	golang.org/x/tools v0.8.0
 )
 

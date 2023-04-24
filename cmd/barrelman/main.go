@@ -29,12 +29,15 @@ func main() {
 	if err != nil {
 		error(err)
 	}
-	cli.Run(
+	err = cli.Run(
 		root,
 		read(coverPath),
 		read(diffPath),
 		report.GitHubActionAnnotation,
 	)
+	if err != nil {
+		error(err)
+	}
 }
 
 func read(path string) io.Reader {

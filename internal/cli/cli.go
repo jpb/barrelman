@@ -5,6 +5,7 @@ import (
 	"io"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/jpb/barrelman/internal/cover"
 	"github.com/jpb/barrelman/internal/git"
@@ -28,6 +29,11 @@ func Run(
 	diff io.Reader,
 	report func(Warning),
 ) error {
+	// All path comparisons are absolute
+
+	finder := source.NewFinder()
+	moduleDirs := source.FindModuleDirs(rootPath)
+
 	additions, err := git.Additions(diff)
 	if err != nil {
 		return err
@@ -42,15 +48,22 @@ func Run(
 	if err != nil {
 		return err
 	}
+
 	// The "file" in a coverage profile is actually the go import name, and a go
 	// import can include a module name. Rewrite the path to be relative to the
 	// root of the project (as git.Additions does)
 	for i, hunk := range uncovered {
-		dir := path.Dir(hunk.Filepath)
-		p, err := source.FindGoPackage(rootPath, dir)
-		uncovered[i].Filepath = path.Join(p.Dir, filepath.Base(hunk.Filepath))
-		if err != nil {
-			return err
+		// Replace the module name in the path with the directory location of the module
+		for module, dir := range moduleDirs {
+			if strings.HasPrefix(hunk.Filepath, module) {
+				uncovered[i].Filepath = strings.Replace(
+					hunk.Filepath,
+					module,
+					dir,
+					1,
+				)
+				break
+			}
 		}
 	}
 	uncoveredByFile := fileHunks(uncovered)
@@ -81,13 +94,13 @@ func Run(
 	// Find files with no test coverage at all
 	for file, hunks := range additionsByFile {
 		if _, ok := uncoveredByFile[file]; ok {
-			// skip as it would be handled above
+			// Skip this file as it would be handled above
 			continue
 		}
 		hunk := hunks[0]
 		relative, _ := filepath.Rel(rootPath, hunk.Filepath)
 		dir := "./" + path.Dir(relative)
-		p, err := source.FindGoPackage(rootPath, dir)
+		p, err := finder.Package(rootPath, dir)
 		if err != nil {
 			fmt.Println(err)
 			continue
