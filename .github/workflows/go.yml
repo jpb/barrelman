@@ -25,7 +25,4 @@ jobs:
     - name: barrelman
       run: |
         git fetch origin $GITHUB_BASE_REF
-        BARRELMAN_DIFF=<(git diff origin/$GITHUB_BASE_REF) go run cmd/barrelman/main.go
-      env:
-        BARRELMAN_COVER: coverage.out
-        BARRELMAN_ROOT_DIR: "."
+        go run cmd/barrelman/main.go coverage.out <(git diff origin/$GITHUB_BASE_REF)

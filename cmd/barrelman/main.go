@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/jpb/barrelman/internal/cli"
 	"github.com/jpb/barrelman/internal/report"
@@ -14,20 +16,23 @@ import (
 func main() {
 	root, ok := os.LookupEnv("BARRELMAN_ROOT_DIR")
 	if !ok {
-		error("BARRELMAN_ROOT_DIR must be set")
+		var err error
+		root, err = gitRoot()
+		if err != nil {
+			fatal(
+				fmt.Sprintf("unable to find git root: %v, please provide BARRELMAN_ROOT_DIR", err),
+			)
+		}
 	}
-	diffPath, ok := os.LookupEnv("BARRELMAN_DIFF")
-	if !ok {
-		error("BARRELMAN_DIFF must be set")
+	if len(os.Args) != 3 {
+		fatal("usage: %s coverage.out <(git diff ...)", os.Args[0])
 	}
-	coverPath, ok := os.LookupEnv("BARRELMAN_COVER")
-	if !ok {
-		error("BARRELMAN_COVER must be set")
-	}
+	coverPath := os.Args[1]
+	diffPath := os.Args[2]
 
 	root, err := filepath.Abs(root)
 	if err != nil {
-		error(err)
+		fatal(err.Error())
 	}
 	err = cli.Run(
 		root,
@@ -36,7 +41,7 @@ func main() {
 		report.GitHubActionAnnotation,
 	)
 	if err != nil {
-		error(err)
+		fatal(err.Error())
 	}
 }
 
@@ -48,7 +53,16 @@ func read(path string) io.Reader {
 	return bytes.NewReader(b)
 }
 
-func error(message interface{}) {
-	fmt.Println(message)
+func fatal(message string, args ...interface{}) {
+	fmt.Printf(message, args...)
+	fmt.Println()
 	os.Exit(1)
+}
+
+func gitRoot() (string, error) {
+	path, err := exec.Command("git", "rev-parse", "--show-toplevel").Output()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(path)), nil
 }
