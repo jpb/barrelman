@@ -1,0 +1,48 @@
+diff --git a/test/fizzbuzz/fizzbuzz.go b/test/fizzbuzz/fizzbuzz.go
+new file mode 100644
+index 0000000..d7eb79c
+--- /dev/null
++++ b/test/fizzbuzz/fizzbuzz.go
+@@ -0,0 +1,23 @@
++package fizzbuzz
++
++import (
++       "strconv"
++)
++
++const (
++       fizz = "fizz"
++       buzz = "buzz"
++)
++
++// FizzBuzz returns "fizz" if i is divisible by 3, "buzz" if i is divisible by
++// 5, "fizzbuzz" if i is divisible by both 3 and 5, and i as a string otherwise
++func FizzBuzz(i int) string {
++       if i%3 == 0 && i%5 == 0 {
++               return fizz + buzz
++       } else if i%3 == 0 {
++               return fizz
++       } else if i%5 == 0 {
++               return buzz
++       }
++       return strconv.Itoa(i)
++}
+diff --git a/test/fizzbuzz/fizzbuzz_test.go b/test/fizzbuzz/fizzbuzz_test.go
+new file mode 100644
+index 0000000..a64ec42
+--- /dev/null
++++ b/test/fizzbuzz/fizzbuzz_test.go
+@@ -0,0 +1,13 @@
++package fizzbuzz_test
++
++import (
++       "testing"
++
++       "github.com/jpb/barrelman/test/fizzbuzz"
++       "github.com/stretchr/testify/require"
++)
++
++func TestFizzBuzz(t *testing.T) {
++       require := require.New(t)
++       require.Equal("fizz", fizzbuzz.FizzBuzz(3))
++}

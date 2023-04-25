@@ -1,0 +1,8 @@
+mode: set
+github.com/jpb/barrelman/test/fizzbuzz/fizzbuzz.go:14.29,15.26 1 1
+github.com/jpb/barrelman/test/fizzbuzz/fizzbuzz.go:15.26,17.3 1 0
+github.com/jpb/barrelman/test/fizzbuzz/fizzbuzz.go:17.8,17.21 1 1
+github.com/jpb/barrelman/test/fizzbuzz/fizzbuzz.go:17.21,19.3 1 1
+github.com/jpb/barrelman/test/fizzbuzz/fizzbuzz.go:19.8,19.21 1 0
+github.com/jpb/barrelman/test/fizzbuzz/fizzbuzz.go:19.21,21.3 1 0
+github.com/jpb/barrelman/test/fizzbuzz/fizzbuzz.go:22.2,22.24 1 0
